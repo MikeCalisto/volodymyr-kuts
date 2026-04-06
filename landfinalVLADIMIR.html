@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI КВП — Курс</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0a;color:#e8e8e8;font-family:'Montserrat',sans-serif;line-height:1.6;overflow-x:hidden;display:flex;justify-content:center}
+.page-wrapper{width:100%;max-width:480px;min-height:100vh;position:relative;box-shadow:0 0 80px rgba(0,0,0,.5);padding-bottom:80px}
+.section-wrap{position:relative;z-index:1;background:#0a0a0a;overflow:hidden}
+.bg-dark{background:#070707}
+.bg-green{background:linear-gradient(180deg,#0a0a0a 0%,#0b0f08 40%,#0d1209 60%,#0a0a0a 100%)}
+.bg-card{background:#0e0e0e}
+.bg-deep{background:linear-gradient(180deg,#0a0a0a 0%,#090909 50%,#070707 100%)}
+
+/* Section image backgrounds from main.png */
+.bg-img-left::before,
+.bg-img-right::before,
+.bg-img-center::before,
+.bg-img-dashboards::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  z-index:0;
+  background-image:url('main.png');
+  background-repeat:no-repeat;
+  background-size:280%;
+  filter:brightness(.13) saturate(.7);
+}
+.bg-img-right::before{background-position:85% 30%}
+.bg-img-left::before{background-position:15% 30%}
+.bg-img-center::before{background-position:50% 60%}
+.bg-img-dashboards::before{background-position:75% 55%}
+.bg-img-left::after,
+.bg-img-right::after,
+.bg-img-center::after,
+.bg-img-dashboards::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  z-index:0;
+  background:linear-gradient(180deg,#0a0a0a 0%,transparent 15%,transparent 85%,#0a0a0a 100%);
+}
+.bg-img-left .inner,
+.bg-img-right .inner,
+.bg-img-center .inner,
+.bg-img-dashboards .inner{position:relative;z-index:1}
+.fc{position:absolute;font-weight:700;user-select:none;pointer-events:none;z-index:0}
+@keyframes fcA{0%,100%{transform:translate(0,0) rotate(0deg)}25%{transform:translate(12px,-18px) rotate(10deg)}50%{transform:translate(-8px,12px) rotate(-6deg)}75%{transform:translate(-15px,-8px) rotate(14deg)}}
+@keyframes fcB{0%,100%{transform:translate(0,0) rotate(0deg)}25%{transform:translate(-18px,10px) rotate(-12deg)}50%{transform:translate(14px,-15px) rotate(8deg)}75%{transform:translate(8px,14px) rotate(-10deg)}}
+@keyframes fcC{0%,100%{transform:translate(0,0) rotate(0deg)}25%{transform:translate(10px,16px) rotate(6deg)}50%{transform:translate(-16px,-12px) rotate(-14deg)}75%{transform:translate(12px,-6px) rotate(10deg)}}
+.s-transition{height:1px;background:rgba(200,255,0,0.05);position:relative;z-index:1}
+.inner{max-width:480px;margin:0 auto;padding:48px 20px}
+.countdown-wrap{text-align:center;margin-top:16px;margin-bottom:24px}
+.countdown-label{font-size:11px;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.countdown-timer{display:flex;gap:8px;align-items:center;justify-content:center;max-width:380px;margin:0 auto}
+.countdown-block{background:rgba(200,255,0,.08);border:1px solid rgba(200,255,0,.15);border-radius:10px;padding:12px 0;flex:1;text-align:center}
+.countdown-num{font-size:28px;font-weight:900;color:#c8ff00;display:block;line-height:1}
+.countdown-unit{font-size:9px;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-top:4px;display:block}
+.countdown-sep{font-size:24px;font-weight:700;color:rgba(200,255,0,.3)}
+.sticky-cta{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:100;padding:16px 20px 12px;background:linear-gradient(180deg,transparent 0%,#0a0a0a 25%);pointer-events:none;display:none}
+.sticky-cta.visible{display:block}
+.sticky-cta-btn{display:flex;align-items:center;justify-content:center;gap:8px;background:#c8ff00;color:#0a0a0a;font-family:'Montserrat',sans-serif;font-size:14px;font-weight:800;padding:16px 24px;border-radius:12px;border:none;cursor:pointer;text-transform:uppercase;letter-spacing:.5px;width:100%;box-shadow:0 -4px 24px rgba(200,255,0,.25);pointer-events:all;animation:ctaPulse 2.5s ease-in-out infinite}
+.who-block{background:rgba(200,255,0,.04);border:1px solid rgba(200,255,0,.15);border-radius:14px;padding:24px;text-align:center;margin-top:32px}
+.who-block-title{font-size:16px;font-weight:900;color:#c8ff00;text-transform:uppercase;margin-bottom:12px}
+.who-block-text{font-size:13px;color:#ccc;line-height:1.55}
+.who-block-text strong{color:#fff;font-weight:700}
+.who-block-saving{display:inline-block;background:rgba(200,255,0,.1);border:1px solid rgba(200,255,0,.2);border-radius:8px;padding:8px 16px;margin-top:12px;font-size:14px;font-weight:800;color:#c8ff00}
+.who-block-note{font-size:11px;color:#ff6b6b;font-style:italic;margin-top:10px;line-height:1.4}
+.cap-benefit{font-size:11px;color:#c8ff00;margin-top:6px;line-height:1.4;font-weight:600;opacity:.85}
+.integration-block{text-align:center;margin-top:36px;padding:32px 20px;background:rgba(200,255,0,.03);border:1px solid rgba(200,255,0,.1);border-radius:16px}
+.integration-label{font-size:13px;color:#ccc;line-height:1.5;margin-bottom:20px}
+.integration-label strong{color:#fff}
+.integration-visual{display:flex;align-items:center;justify-content:center;gap:16px}
+.integration-circle{width:100px;height:100px;border-radius:50%;background:rgba(200,255,0,.08);border:2px solid rgba(200,255,0,.25);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.integration-num{font-size:36px;font-weight:900;color:#c8ff00;line-height:1}
+.integration-unit{font-size:11px;color:#888;text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+.integration-note{font-size:12px;color:#999;max-width:140px;line-height:1.4;text-align:left}
+.hero-top-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;gap:12px;flex-wrap:wrap}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(200,255,0,0.1);border:1px solid rgba(200,255,0,0.25);border-radius:12px;padding:10px 16px;font-size:11px;font-weight:700;color:#c8ff00;text-transform:uppercase;letter-spacing:.5px;line-height:1.4;text-align:center;width:100%}
+.hero-badge::before{content:'';width:8px;height:8px;min-width:8px;min-height:8px;background:#c8ff00;border-radius:50%;flex-shrink:0;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.start-timer{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:6px 14px}
+.timer-label{font-size:10px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.5px}
+.timer-date{font-size:12px;font-weight:800;color:#c8ff00}
+.hero-bg-section{position:relative;background:#0a0a0a;overflow:hidden}
+.hero-bg-img{position:absolute;top:-15%;left:0;right:0;bottom:0;z-index:0}
+.hero-bg-img img{width:100%;height:100%;object-fit:cover;object-position:center 10%;filter:brightness(.18) saturate(.6)}
+.hero-bg-img::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at center 42%,transparent 10%,rgba(10,10,10,.65) 40%,#0a0a0a 70%)}
+.hero-bg-section .inner{position:relative;z-index:2}
+.hero-floats{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.hf{position:absolute;mix-blend-mode:screen;animation:hf-drift ease-in-out infinite}
+.hf img{width:100%;height:100%;object-fit:contain;display:block}
+@keyframes hf-drift{0%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-22px) rotate(6deg)}100%{transform:translateY(0) rotate(0deg)}}
+@keyframes hf-drift2{0%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-18px) rotate(4deg)}100%{transform:translateY(0) rotate(-4deg)}}
+@keyframes hf-drift3{0%{transform:translateY(0) rotate(8deg)}50%{transform:translateY(16px) rotate(-3deg)}100%{transform:translateY(0) rotate(8deg)}}
+.hero-spacer{height:100px}
+.hero-title{font-size:24px;font-weight:900;color:#fff;line-height:1.25;margin-bottom:20px}
+.hero-title span{color:#c8ff00}
+.hero-bullets{list-style:none;margin-bottom:28px;display:flex;flex-direction:column;gap:12px}
+.hero-bullets li{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#ccc;line-height:1.45}
+.hero-bullets li::before{content:'→';color:#c8ff00;font-weight:700;flex-shrink:0;margin-top:1px}
+.hero-subtitle{font-size:13px;font-weight:500;color:#999;line-height:1.5;margin-bottom:16px;padding:12px 16px;background:rgba(255,255,255,.03);border-radius:10px;border:1px solid rgba(255,255,255,.06)}
+.practice-banner{display:flex;gap:12px;align-items:center;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:14px 16px;margin-bottom:28px}
+.practice-banner-icon{flex-shrink:0;font-size:18px}
+.practice-banner-text{font-size:13px;font-weight:600;color:#fff;line-height:1.45}
+.price-block{text-align:center;margin-bottom:16px}
+.price-old{font-size:16px;font-weight:600;color:#666;text-decoration:line-through;margin-right:12px}
+.price-new{font-size:28px;font-weight:900;color:#fff}
+.price-new em{font-size:16px;font-weight:600;color:#999;font-style:normal}
+.cta-wrapper{text-align:center;margin-bottom:12px}
+.cta-button{display:inline-flex;align-items:center;justify-content:center;gap:10px;background:#c8ff00;color:#0a0a0a;font-family:'Montserrat',sans-serif;font-size:15px;font-weight:800;padding:16px 40px;border-radius:12px;border:none;cursor:pointer;text-transform:uppercase;letter-spacing:.5px;width:100%;max-width:380px;box-shadow:0 4px 24px rgba(200,255,0,.2);animation:ctaPulse 2.5s ease-in-out infinite;transition:box-shadow .3s}
+.cta-button:hover{box-shadow:0 8px 32px rgba(200,255,0,.35)}
+@keyframes ctaPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+.discount-badge{background:#0a0a0a;color:#c8ff00;font-size:12px;font-weight:800;padding:4px 10px;border-radius:6px}
+.cta-note{text-align:center;font-size:11px;color:#555;margin-top:10px;margin-bottom:24px}
+.bonuses-mini{background:rgba(200,255,0,.04);border:1px solid rgba(200,255,0,.12);border-radius:14px;padding:20px}
+.bonuses-mini-label{font-size:12px;font-weight:800;color:#c8ff00;text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;text-align:center}
+.bonus-mini-cards{display:flex;flex-direction:column;gap:12px}
+.bonus-mini-card{display:flex;gap:14px;align-items:center;background:#141414;border:1px solid #222;border-radius:10px;padding:14px}
+.bonus-mini-img{flex-shrink:0;width:64px;height:64px;background:#141414;border:1px solid rgba(200,255,0,.15);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.bonus-mini-text{flex:1}
+.bonus-mini-name{font-size:13px;font-weight:700;color:#fff;margin-bottom:3px;line-height:1.35}
+.bonus-mini-desc{font-size:11px;color:#888;line-height:1.4}
+.bonuses-mini-footer{font-size:11px;color:#777;line-height:1.5;margin-top:14px;text-align:center;font-style:italic}
+.cap-header{text-align:center;margin-bottom:40px}
+.cap-header h2{font-size:22px;font-weight:900;color:#fff;text-transform:uppercase;line-height:1.25;margin-bottom:12px}
+.cap-header h2 span{color:#c8ff00}
+.cap-header p{font-size:12px;color:#aaa;line-height:1.5}
+.cap-header p .hl{color:#c8ff00;font-weight:700}
+.cap-grid{display:flex;flex-direction:column;gap:12px;margin-bottom:36px}
+.cap-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:20px;display:flex;gap:14px;align-items:flex-start;transition:border-color .3s}
+.cap-card:hover{border-color:rgba(200,255,0,.3)}
+.cap-icon{flex-shrink:0;width:48px;height:48px;background:rgba(200,255,0,.06);border:1px solid rgba(200,255,0,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;overflow:hidden}
+.cap-icon svg{display:block}
+.cap-icon img{width:100%;height:100%;object-fit:contain;display:block;mix-blend-mode:screen;}
+.cap-icon:has(img){background:none;border:none;width:56px;height:56px;overflow:visible;}
+.cap-text{flex:1}
+.cap-title{font-size:14px;font-weight:700;color:#fff;margin-bottom:4px;line-height:1.35}
+.cap-desc{font-size:12px;color:#999;line-height:1.45}
+.cap-card.emphasis{background:rgba(200,255,0,.04);border-color:rgba(200,255,0,.2)}
+.cap-card.emphasis .cap-icon{background:rgba(200,255,0,.15);border-color:rgba(200,255,0,.3)}
+.cap-bottom-note{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:20px;text-align:center;margin-bottom:24px}
+.cap-bottom-note p{font-size:13px;color:#ccc;line-height:1.55}
+.cap-bottom-note strong{color:#c8ff00;font-weight:700}
+.no-need-block{background:rgba(255,107,107,.06);border:1px solid rgba(255,107,107,.15);border-radius:12px;padding:20px}
+.no-need-label{font-size:13px;font-weight:800;color:#ff6b6b;margin-bottom:12px}
+.no-need-list{list-style:none;display:flex;flex-direction:column;gap:8px}
+.no-need-list li{font-size:13px;color:#ccc;padding-left:20px;position:relative;line-height:1.45}
+.no-need-list li::before{content:'✕';position:absolute;left:0;color:#ff6b6b;font-weight:700;font-size:12px}
+.forwho-header{text-align:center;margin-bottom:36px}
+.forwho-header h2{font-size:24px;font-weight:900;color:#fff;text-transform:uppercase;line-height:1.25}
+.forwho-header h2 span{color:#c8ff00}
+.forwho-grid{display:flex;flex-direction:column;gap:16px}
+.forwho-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:24px;position:relative;overflow:hidden}
+.forwho-card::before{content:attr(data-num);position:absolute;top:12px;right:16px;font-size:48px;font-weight:900;color:rgba(200,255,0,.06);line-height:1}
+.forwho-badge{display:inline-block;background:rgba(200,255,0,.12);color:#c8ff00;font-size:10px;font-weight:700;padding:3px 10px;border-radius:12px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.forwho-title{font-size:16px;font-weight:800;color:#fff;margin-bottom:8px;line-height:1.3}
+.forwho-desc{font-size:13px;color:#aaa;line-height:1.5;border:1px dashed rgba(200,255,0,.25);border-radius:10px;padding:12px 14px;background:rgba(200,255,0,.02)}
+.prog-header{text-align:center;margin-bottom:40px}
+.prog-header h2{font-size:26px;font-weight:900;text-transform:uppercase;color:#fff;line-height:1.2}
+.prog-header h2 span{color:#c8ff00}
+.prog-header .sub{font-size:14px;color:#999;margin-top:12px}
+.prog-accordion{display:flex;flex-direction:column;gap:12px}
+.prog-item{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;overflow:hidden;transition:border-color .3s}
+.prog-item:hover{border-color:rgba(200,255,0,.2)}
+.prog-item-header{display:flex;align-items:center;gap:14px;padding:20px;cursor:pointer;user-select:none}
+.prog-item-num{flex-shrink:0;width:48px;height:48px;background:rgba(200,255,0,.1);border:1px solid rgba(200,255,0,.25);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#c8ff00}
+.prog-item-title{flex:1;font-size:15px;font-weight:700;color:#fff;line-height:1.35}
+.prog-item-toggle{flex-shrink:0;width:28px;height:28px;border-radius:50%;background:rgba(200,255,0,.1);display:flex;align-items:center;justify-content:center;font-size:16px;color:#c8ff00;transition:transform .3s}
+.prog-item.open .prog-item-toggle{transform:rotate(45deg)}
+.prog-item-body{max-height:0;overflow:hidden;transition:max-height .5s ease}
+.prog-item.open .prog-item-body{max-height:2000px}
+.prog-item-inner{padding:0 20px 24px}
+.prog-item-live{display:inline-block;background:#ff3b3b;color:#fff;font-size:9px;font-weight:800;padding:3px 10px;border-radius:4px;text-transform:uppercase;letter-spacing:.5px;margin-left:8px;vertical-align:middle}
+.important-banner{background:rgba(200,255,0,.06);border:1px solid rgba(200,255,0,.2);border-radius:10px;padding:14px 16px;margin-bottom:24px;display:flex;gap:10px;align-items:flex-start}
+.important-banner-icon{flex-shrink:0;width:24px;height:24px;background:#c8ff00;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:#0a0a0a}
+.important-banner-text{font-size:12px;line-height:1.5;color:#ccc}
+.important-banner-text strong{color:#c8ff00;font-weight:700;font-size:11px;letter-spacing:.5px;display:block;margin-bottom:3px}
+.bullets-list{list-style:none;margin-bottom:28px}
+.bullets-list li{position:relative;padding-left:24px;margin-bottom:14px;font-size:14px;color:#ccc;line-height:1.55}
+.bullets-list li::before{content:'';position:absolute;left:0;top:8px;width:8px;height:8px;background:#c8ff00;border-radius:50%}
+.practice-tag{display:inline-block;background:rgba(200,255,0,.12);color:#c8ff00;font-size:11px;font-weight:700;padding:3px 10px;border-radius:4px;text-transform:uppercase;letter-spacing:.5px;margin-right:6px}
+.result-block{background:rgba(0,0,0,.15);border-left:3px solid #c8ff00;border-radius:0 12px 12px 0;padding:20px}
+.result-label{font-size:12px;font-weight:800;color:#c8ff00;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px}
+.result-item{margin-bottom:12px;font-size:13px;line-height:1.55;color:#bbb;position:relative;padding-left:20px}
+.result-item:last-child{margin-bottom:0}
+.result-item::before{content:'✓';position:absolute;left:0;color:#c8ff00;font-weight:700;font-size:13px}
+.result-item.emotional{color:#999;font-style:italic}
+.homework-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(200,255,0,.08);border:1px solid rgba(200,255,0,.2);color:#c8ff00;font-size:12px;font-weight:600;padding:8px 16px;border-radius:8px;margin-top:20px}
+.homework-tag::before{content:'📋';font-size:14px}
+.bonus-section{margin-top:28px}
+.bonus-label{font-size:13px;font-weight:800;color:#c8ff00;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:20px}
+.bonus-cards{display:flex;flex-direction:column;gap:16px}
+.bonus-card{display:flex;gap:16px;align-items:center;background:rgba(0,0,0,.15);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:16px}
+.bonus-card-text{flex:1}
+.bonus-card-title{font-size:13px;font-weight:700;color:#fff;margin-bottom:4px;line-height:1.4}
+.bonus-card-desc{font-size:11px;color:#999;line-height:1.4}
+.mockup-pdf{flex-shrink:0;width:68px;height:88px;background:#222;border-radius:6px;border:1px solid #333;overflow:hidden;display:flex;flex-direction:column}
+.mockup-pdf-header{background:#c8ff00;height:18px;display:flex;align-items:center;justify-content:center}
+.mockup-pdf-header span{font-size:6px;font-weight:800;color:#0a0a0a;letter-spacing:.5px;text-transform:uppercase}
+.mockup-pdf-body{flex:1;padding:7px 6px;display:flex;flex-direction:column;gap:5px}
+.mockup-pdf-row{display:flex;align-items:center;gap:4px}
+.mockup-check{width:6px;height:6px;border:1px solid rgba(200,255,0,.5);border-radius:1px;flex-shrink:0}
+.mockup-check.filled{background:rgba(200,255,0,.4);border-color:#c8ff00}
+.mockup-line{height:3px;background:#333;border-radius:2px;flex:1}
+.mockup-line.short{width:60%;flex:none}
+.mockup-line.accent{background:rgba(200,255,0,.15)}
+.mockup-pdf-footer{padding:4px 6px;display:flex;justify-content:flex-end}
+.mockup-pdf-badge{background:rgba(200,255,0,.12);border-radius:2px;padding:1px 4px;font-size:5px;color:#c8ff00;font-weight:700}
+.mockup-nlm{flex-shrink:0;width:68px;height:88px;background:#1a1a2e;border-radius:6px;border:1px solid #333;overflow:hidden;display:flex;flex-direction:column}
+.mockup-nlm-header{background:#252540;height:14px;display:flex;align-items:center;padding:0 5px;gap:3px}
+.mockup-nlm-dot{width:3px;height:3px;border-radius:50%}
+.mockup-nlm-dot.r{background:#ff5f57}.mockup-nlm-dot.y{background:#febc2e}.mockup-nlm-dot.g{background:#28c840}
+.mockup-nlm-tab{margin-left:auto;background:#353555;border-radius:2px;padding:1px 4px;font-size:4px;color:#888;font-weight:600}
+.mockup-nlm-body{flex:1;padding:6px}
+.mockup-criteria{flex-shrink:0;width:68px;height:88px;background:#222;border-radius:6px;border:1px solid #333;overflow:hidden;display:flex;flex-direction:column}
+.mockup-criteria-header{background:#c8ff00;height:18px;display:flex;align-items:center;justify-content:center}
+.mockup-criteria-header span{font-size:5px;font-weight:800;color:#0a0a0a;text-transform:uppercase}
+.mockup-criteria-body{flex:1;padding:5px;display:flex;flex-direction:column;gap:3px}
+.mockup-criteria-row{display:flex;align-items:center;gap:3px}
+.mockup-criteria-num{font-size:5px;font-weight:800;color:#c8ff00;width:8px;text-align:right;flex-shrink:0}
+.mockup-criteria-bar{flex:1;height:4px;background:#333;border-radius:2px;position:relative;overflow:hidden}
+.mockup-criteria-fill{position:absolute;top:0;left:0;bottom:0;background:rgba(200,255,0,.25);border-radius:2px}
+.mockup-criteria-footer{padding:3px 5px;display:flex;justify-content:flex-end}
+.cases-header{text-align:center;margin-bottom:24px}
+.cases-header h2{font-size:20px;font-weight:900;color:#fff;text-transform:uppercase;line-height:1.25}
+.cases-header h2 span{color:#c8ff00}
+.cases-carousel{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding-bottom:12px;scrollbar-width:none}
+.cases-carousel::-webkit-scrollbar{display:none}
+.case-card{flex:0 0 85%;scroll-snap-align:start;background:rgba(255,255,255,.04);border:1px solid rgba(200,255,0,.1);border-radius:16px;overflow:hidden;position:relative}
+.case-card-header{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;background:rgba(0,0,0,.2);border-bottom:1px solid rgba(255,255,255,.06);gap:12px}
+.case-logo-wrap{width:48px;height:48px;border-radius:12px;overflow:hidden;background:#fff;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.case-logo-wrap img{width:100%;height:100%;object-fit:cover}
+.case-logo-wrap.dark{background:rgba(255,255,255,.08)}
+.case-logo-wrap.dark img{width:80%;height:80%;object-fit:contain;filter:brightness(0) invert(1)}
+.case-header-info{flex:1}
+.case-name{font-size:14px;font-weight:800;color:#fff;margin-bottom:2px;line-height:1.2}
+.case-niche{font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.5px}
+.case-result-num{font-size:40px;font-weight:900;color:#c8ff00;line-height:1;text-align:right}
+.case-body{padding:18px 20px}
+.case-stage{margin-bottom:12px}
+.case-stage-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+.case-stage-label.before{color:#ff6b6b}
+.case-stage-label.did{color:#c8ff00}
+.case-stage-text{font-size:13px;color:#bbb;line-height:1.5}
+.case-result-line{font-size:12px;color:#c8ff00;font-weight:600;margin-top:12px;padding:12px 16px;background:rgba(200,255,0,.05);border-radius:8px;border-left:3px solid #c8ff00;line-height:1.45}
+.cases-dots{display:flex;justify-content:center;gap:8px;margin-top:16px}
+.cases-dot{width:8px;height:8px;border-radius:50%;background:rgba(200,255,0,.15);transition:background .3s}
+.cases-dot.active{background:#c8ff00}
+.author-header{text-align:center;margin-bottom:32px}
+.author-header h2{font-size:24px;font-weight:900;color:#fff;text-transform:uppercase}
+.author-header h2 span{color:#c8ff00}
+.author-card{border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.08)}
+.author-photo-wrap{position:relative;height:320px;overflow:hidden}
+.author-photo-wrap img{width:100%;height:100%;object-fit:cover;object-position:center 10%;display:block;filter:brightness(.95)}
+.author-photo-wrap::after{content:'';position:absolute;bottom:0;left:0;right:0;height:55%;background:linear-gradient(transparent,#141414)}
+.author-info-bar{background:#141414;padding:20px 24px 0}
+.author-name{font-size:22px;font-weight:900;color:#fff;margin-bottom:4px}
+.author-role{font-size:11px;color:#c8ff00;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:20px}
+.author-points{list-style:none;display:flex;flex-direction:column;gap:10px;padding-bottom:24px}
+.author-points li{font-size:13px;color:#bbb;padding-left:20px;position:relative;line-height:1.5}
+.author-points li::before{content:'→';position:absolute;left:0;color:#c8ff00;font-weight:700}
+.author-quote{background:rgba(200,255,0,.04);border:1px solid rgba(200,255,0,.12);border-radius:12px;padding:20px;margin-top:24px;position:relative}
+.author-quote::before{content:'«';font-size:48px;font-weight:900;color:rgba(200,255,0,.15);position:absolute;top:8px;left:12px;line-height:1}
+.author-quote-text{font-size:13px;color:#ccc;line-height:1.6;font-style:italic;padding-left:8px}
+.author-quote-name{font-size:11px;color:#c8ff00;font-weight:700;margin-top:10px;padding-left:8px}
+.wyg-header{text-align:center;margin-bottom:32px}
+.wyg-header h2{font-size:22px;font-weight:900;color:#fff;text-transform:uppercase;line-height:1.25}
+.wyg-header h2 span{color:#c8ff00}
+.step-path{display:flex;flex-direction:column;align-items:center;gap:0}
+.step-card{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(200,255,0,.1);border-radius:14px;padding:20px;display:flex;gap:14px;align-items:flex-start}
+.step-num{flex-shrink:0;width:40px;height:40px;background:rgba(200,255,0,.12);border:1px solid rgba(200,255,0,.25);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#c8ff00}
+.step-text{flex:1}
+.step-title{font-size:14px;font-weight:700;color:#fff;line-height:1.35;margin-bottom:4px}
+.step-desc{font-size:12px;color:#999;line-height:1.45}
+.step-arrow{display:flex;justify-content:center;padding:6px 0}
+.step-arrow svg{opacity:.4}
+.wyg-grid{display:flex;flex-direction:column;gap:12px}
+.wyg-card{display:flex;gap:14px;align-items:flex-start;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:18px}
+.wyg-num{flex-shrink:0;width:32px;height:32px;background:rgba(200,255,0,.1);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#c8ff00}
+.wyg-text{flex:1}
+.wyg-text-title{font-size:14px;font-weight:700;color:#fff;margin-bottom:3px;line-height:1.35}
+.wyg-text-desc{font-size:12px;color:#999;line-height:1.45}
+.faq-header{text-align:center;margin-bottom:32px}
+.faq-header h2{font-size:24px;font-weight:900;text-transform:uppercase;line-height:1.25}
+.faq-header h2 span{color:#c8ff00}
+.faq-item{border:1px solid rgba(255,255,255,.1);border-radius:12px;margin-bottom:12px;overflow:hidden}
+.faq-q{padding:18px 20px;font-size:14px;font-weight:700;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;transition:background .2s}
+.faq-q:hover{background:rgba(255,255,255,.03)}
+.faq-q .icon{flex-shrink:0;width:24px;height:24px;border-radius:50%;background:rgba(200,255,0,.1);display:flex;align-items:center;justify-content:center;font-size:14px;color:#c8ff00;transition:transform .3s}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.faq-a-inner{padding:0 20px 18px;font-size:13px;color:#aaa;line-height:1.55}
+.faq-item.open .faq-a{max-height:300px}
+.faq-item.open .faq-q .icon{transform:rotate(45deg)}
+.final-cta{text-align:center}
+.final-cta h2{font-size:24px;font-weight:900;color:#fff;text-transform:uppercase;line-height:1.25;margin-bottom:16px}
+.final-cta h2 span{color:#c8ff00}
+.final-cta p{font-size:14px;color:#999;margin-bottom:28px;line-height:1.5}
+</style>
+</head>
+<body>
+<div class="page-wrapper">
+
+<!-- HERO -->
+<div class="section-wrap hero-bg-section">
+<div class="hero-bg-img"><img src="main.png" alt=""></div>
+<div class="hero-floats">
+  <!-- Sharp — ai_badge top-right -->
+  <div class="hf" style="right:-8px;top:4%;width:135px;height:135px;opacity:.8;filter:drop-shadow(0 0 18px rgba(200,255,0,.45));animation-name:hf-drift;animation-duration:8s;animation-delay:0s"><img src="ai_badge.png"></div>
+  <!-- Blurred — dollar bottom-left -->
+  <div class="hf" style="left:5px;top:70%;width:100px;height:100px;opacity:.6;filter:blur(4px);animation-name:hf-drift3;animation-duration:13s;animation-delay:-7s"><img src="dollar.png"></div>
+</div>
+<div class="inner">
+  <div class="hero-top-row">
+    <div class="hero-badge">Практичний курс з домашніми завданнями та підтримкою особисто від автора курсу</div>
+    <div class="start-timer"><span class="timer-label">Старт</span><span class="timer-date" id="startDate"></span></div>
+  </div>
+  <h1 class="hero-title">Як створити <span>керівника відділу продажів через AI</span> за <span>5</span> простих уроків – та підвищити продажі у <span>2-4</span> рази у своєму бізнесі?</h1>
+  <div class="hero-spacer"></div>
+  <ul class="hero-bullets">
+    <li>Проаналізуйте дзвінки, переписки, зустрічі за 5 хв — не переслуховуючи кожен</li>
+    <li>Дізнайтесь слабкі та сильні місця кожного менеджера або усього відділу продажів</li>
+    <li>Знайдіть, на якому етапі ви втрачаєте гроші, щоб клієнти БІЛЬШЕ не відвалювались</li>
+  </ul>
+  <div style="position:relative;overflow:hidden;border-radius:10px;">
+    <img src="dollar.png" style="position:absolute;left:-20px;top:10%;transform:translateY(0);width:110px;height:110px;object-fit:contain;opacity:.45;filter:blur(5px);mix-blend-mode:screen;pointer-events:none;animation:hf-drift3 10s ease-in-out infinite;">
+    <p class="hero-subtitle" style="position:relative;z-index:1;">AI керівник відділу продажів працює, навіть якщо у вас лише 1 менеджер чи ви продаєте самі.</p>
+  </div>
+  <div class="practice-banner"><div class="practice-banner-icon">⚙️</div><div class="practice-banner-text">Цей курс — не про «показати можливість». Цей курс — про практичне застосування AI керівника відділу продажів в вашому існуючому бізнесі.</div></div>
+  <div class="price-block"><span class="price-old">4 200 грн</span><span class="price-new">390 <em>грн</em></span></div>
+  <div class="cta-wrapper"><button class="cta-button">Отримати доступ <span class="discount-badge">-91%</span></button></div>
+  <div class="countdown-wrap">
+    <div class="countdown-label">До закінчення пропозиції залишилось:</div>
+    <div class="countdown-timer">
+      <div class="countdown-block"><span class="countdown-num" id="cdMin">10</span><span class="countdown-unit">хв</span></div>
+      <span class="countdown-sep">:</span>
+      <div class="countdown-block"><span class="countdown-num" id="cdSec">00</span><span class="countdown-unit">сек</span></div>
+    </div>
+  </div>
+  <div class="bonuses-mini">
+    <div class="bonuses-mini-label">Ось які бонуси ви отримаєте одразу після покупки курсу:</div>
+    <div class="bonus-mini-cards">
+      <div class="bonus-mini-card">
+        <div class="bonus-mini-img"><svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect x="6" y="8" width="36" height="32" rx="4" fill="#1a1a1a" stroke="rgba(200,255,0,0.3)" stroke-width="1.5"/><rect x="10" y="13" width="20" height="2" rx="1" fill="rgba(200,255,0,0.4)"/><rect x="10" y="18" width="28" height="1.5" rx=".75" fill="#333"/><rect x="10" y="22" width="24" height="1.5" rx=".75" fill="#333"/><rect x="10" y="26" width="26" height="1.5" rx=".75" fill="#333"/><rect x="10" y="30" width="20" height="1.5" rx=".75" fill="#333"/><path d="M34 13l2 2 4-4" stroke="#c8ff00" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="bonus-mini-text"><div class="bonus-mini-name">Список готових промтів</div><div class="bonus-mini-desc">Для швидкого копіювання та інтеграції AI КВП прямо під час курсу</div></div>
+      </div>
+      <div class="bonus-mini-card">
+        <div class="bonus-mini-img"><svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="22" r="14" fill="#1a1a1a" stroke="rgba(200,255,0,0.3)" stroke-width="1.5"/><circle cx="24" cy="22" r="6" fill="rgba(200,255,0,0.1)" stroke="rgba(200,255,0,0.4)" stroke-width="1"/><path d="M22 20l5 2-5 2v-4z" fill="#c8ff00"/><rect x="12" y="38" width="24" height="3" rx="1.5" fill="rgba(200,255,0,0.15)"/></svg></div>
+        <div class="bonus-mini-text"><div class="bonus-mini-name">Готовий асистент GPT «Консультант продажів»</div><div class="bonus-mini-desc">Автор курсу створив GPT-асистента на основі найкращих продавців світу. Задайте будь-яке питання з продажів — отримайте дієву відповідь.</div></div>
+      </div>
+    </div>
+    <div class="bonuses-mini-footer">І це не просто бонуси, які ви ніколи не відкриєте. Як підприємець — ви оціните: ці бонуси ще більше спростять вам життя та зекономлять ваш час під час проходження курсу.</div>
+  </div>
+  <div class="who-block">
+    <div class="who-block-title">Хто такий AI КВП?</div>
+    <div class="who-block-text">AI КВП — це <strong>AI керівник відділу продажів</strong>, який реально замінює живу людину-КВП та економить вам</div>
+    <div class="who-block-saving">35 000 – 80 000 грн/міс</div>
+    <div class="who-block-note">*це не автономний AI агент або AI асистент</div>
+  </div>
+</div>
+</div>
+<div class="s-transition"></div>
+
+<!-- CAPABILITIES -->
+<div class="section-wrap bg-green">
+<div class="inner">
+  <div class="cap-header">
+    <h2>Що вміє <span>AI КВП</span> і які питання він закриває?</h2>
+    <p>Весь курс побудований на роботі з <span class="hl">одним AI-інструментом</span> — Notebook LM, <span class="hl">готовими</span> промтами та <span class="hl">авторській методиці</span> роботи з інструментом із відділами продажів від Володимира Куц.</p>
+  </div>
+  <div class="cap-grid">
+    <div class="cap-card"><div class="cap-icon"><img src="icon1.png"></div><div class="cap-text"><div class="cap-title">Знаходить конкретні точки, де бізнес втрачає гроші на етапі продажів — за хвилини</div><div class="cap-desc">Показує конкретні точки у вашому відділі продажів або роботі менеджера, де зливаються клієнти та угоди</div><div class="cap-benefit">→ Ви знаєте, куди направити зусилля — щоб кожна вкладена гривня приносила результат</div></div></div>
+    <div class="cap-card"><div class="cap-icon"><img src="icon2.png"></div><div class="cap-text"><div class="cap-title">Аналізує сотні дзвінків та переписок за 2 хвилини — замість тижнів вручну та годин часу</div><div class="cap-desc">Знаходить найкращі діалоги, які реально закривають — ті, що ви самі ніколи не прослухаєте, адже вам ніколи не вистачає часу</div><div class="cap-benefit">→ Ви отримуєте готову аналітику по всіх розмовах — і точно знаєте, які техніки продажів працюють у вашому бізнесі, а які зливають клієнтів</div></div></div>
+    <div class="cap-card"><div class="cap-icon"><img src="icon3.png"></div><div class="cap-text"><div class="cap-title">Виявляє, чого клієнт насправді хоче — навіть якщо він цього не каже</div><div class="cap-desc">Бачить те, що менеджери не помічають під час розмови — справжні причини, чому клієнт купує або йде</div><div class="cap-benefit">→ Ви розумієте, за що клієнт готовий платити — і перестаєте продавати те, що йому не потрібно</div></div></div>
+    <div class="cap-card"><div class="cap-icon"><img src="icon4.png"></div><div class="cap-text"><div class="cap-title">Показує, чому клієнти кажуть «ні» — і на якому етапі продажів ви їх втрачаєте</div><div class="cap-desc">Показує, чому клієнти не купують і на якому саме етапі ваш менеджер їх втрачає</div><div class="cap-benefit">→ Ви зменшуєте кількість «злитих» клієнтів на етапі заперечень</div></div></div>
+    <div class="cap-card emphasis"><div class="cap-icon"><img src="icon5.png"></div><div class="cap-text"><div class="cap-title">Збирає висококонверсійний скрипт продажів з найкращих дзвінків / переписок — в пару кліків</div><div class="cap-desc">Збирає готовий скрипт із найсильніших розмов ваших менеджерів — не з шаблонів з інтернету, а з того, що вже працює у вашому бізнесі</div><div class="cap-benefit">→ Ваші слабкі менеджери починають продавати на рівні сильних, впроваджуєте скрипт за 1 день, бачите зміни в конверсії вже цього тижня</div></div></div>
+    <div class="cap-card"><div class="cap-icon"><img src="icon6.png"></div><div class="cap-text"><div class="cap-title">Оцінює кожен дзвінок по 10 критеріях — автоматично, без вас</div><div class="cap-desc">Автоматична оцінка якості кожної розмови — без вашої участі, без прослуховування</div><div class="cap-benefit">→ Ви знаєте, кого навчити, кого похвалити, а з ким попрощатися — на основі даних, а не інтуїції. Контроль якості працює 24/7</div></div></div>
+    <div class="cap-card"><div class="cap-icon"><img src="icon7.png"></div><div class="cap-text"><div class="cap-title">Показує, чому один менеджер закриває, а інший — зливає</div><div class="cap-desc">Хто зливає на запереченнях, хто не закриває, хто не чує клієнта — ви бачите це в конкретних даних</div><div class="cap-benefit">→ Кожен менеджер отримує персональний план покращення — і росте в конверсії за тижні, а не місяці</div></div></div>
+    <div class="cap-card emphasis"><div class="cap-icon"><img src="icon8.png"></div><div class="cap-text"><div class="cap-title">Замінює живого керівника відділу продажів — з першої хвилини, без зарплати</div><div class="cap-desc">Контролює, аналізує, створює скрипти — без зарплати, без адаптації, без людського фактору</div><div class="cap-benefit">→ Ви економите 35 000–80 000 грн/міс на зарплаті живого КВП. Система працює з першого дня</div></div></div>
+  </div>
+  <div class="cap-bottom-note"><p><strong>Важливо:</strong> ми не продаємо вам готовий інструмент. Ми навчаємо вас користуватися вже існуючим безкоштовним AI-інструментом — за методологією Володимира Куц, яка вже працює в реальних бізнесах.</p></div>
+  <br>
+  <div class="no-need-block"><div class="no-need-label">Вам не потрібно:</div><ul class="no-need-list"><li>Мати технічні знання чи програміста в команді</li><li>Вміло володіти англійською</li><li>Інвестувати додаткові кошти</li></ul></div>
+  <div class="integration-block"><div class="integration-label">Для того, щоб інтегрувати <strong>AI КВП</strong> у ваш бізнес, вам потрібно лише:</div><div class="integration-visual"><div class="integration-circle"><span class="integration-num">2</span><span class="integration-unit">години</span></div><div class="integration-note">Вашого часу на проходження курсу та виконання практичних завдань</div></div></div>
+</div>
+</div>
+<div class="s-transition"></div>
+
+<!-- FOR WHO -->
+<div class="section-wrap bg-dark">
+<div class="inner">
+  <div class="forwho-header"><h2>Для кого я створив <span>цей курс?</span></h2></div>
+  <div class="forwho-grid">
+    <div class="forwho-card" data-num="01"><div class="forwho-badge">Власник бізнесу / підприємець</div><div class="forwho-title">Підприємець з 3–10 менеджерами</div><div class="forwho-desc">Кожен менеджер продає по-своєму, немає єдиного скрипту, контроль — вручну або його немає зовсім. AI КВП покаже, хто і де втрачає ваші гроші, створить скрипт з найкращих дзвінків та побудує систему контролю — без вашої участі.</div></div>
+    <div class="forwho-card" data-num="02"><div class="forwho-badge">Перші менеджери в команді</div><div class="forwho-title">Будую відділ продажів з нуля</div><div class="forwho-desc">Ви тільки починаєте будувати продажі і не хочете вчитися на своїх помилках. AI КВП дасть вам систему з першого дня — скрипт, контроль якості, аналіз дзвінків — ще до того, як команда розросте.</div></div>
+    <div class="forwho-card" data-num="03"><div class="forwho-badge">Керівник відділу продажів</div><div class="forwho-title">КВП в існуючому бізнесі</div><div class="forwho-desc">Ви відповідаєте за результат відділу, але фізично не можете проконтролювати кожного менеджера. AI КВП аналізує кожен дзвінок автоматично — ви бачите повну картину без годин прослуховування.</div></div>
+    <div class="forwho-card" data-num="04"><div class="forwho-badge">Менеджер, який хоче закривати більше</div><div class="forwho-title">Менеджер продажів в існуючому бізнесі</div><div class="forwho-desc">Ви хочете продавати більше, але немає думок як покращити скрипт. AI КВП створить скрипт з ваших найкращих дзвінків — і покаже, що конкретно виправити, щоб продавати більше = заробляти більше.</div></div>
+    <div class="forwho-card" data-num="05"><div class="forwho-badge">Фаундер без відділу продажів</div><div class="forwho-title">Підприємець, який тягне все на собі</div><div class="forwho-desc">У вас немає відділу продажів, але є клієнти, дзвінки, переписки. AI КВП покаже, де ви втрачаєте клієнтів, створить скрипт продажів з ваших найкращих дзвінків і допоможе побудувати систему — щоб коли ви наймете першого менеджера, він одразу працював за перевіреним сценарієм.</div></div>
+  </div>
+</div>
+</div>
+<div class="s-transition"></div>
+
+<!-- PROGRAM ACCORDION -->
+<div class="section-wrap bg-green">
+<div class="inner">
+  <div class="prog-header"><h2>Програма курсу <span>«AI КВП»</span></h2><p class="sub">5 уроків — натисніть <span style="color:#c8ff00;font-weight:800">«+»</span>, щоб розгорнути</p></div>
+  <div class="prog-accordion">
+    <div class="prog-item">
+      <div class="prog-item-header" onclick="this.parentElement.classList.toggle('open')"><div class="prog-item-num">01</div><div class="prog-item-title">Як дізнатись в пару кліків, чому ваш відділ продажів або менеджер працює не на повну?</div><div class="prog-item-toggle">+</div></div>
+      <div class="prog-item-body"><div class="prog-item-inner">
+        <ul class="bullets-list"><li>Чому один менеджер продає в 5 разів більше за іншого — і це не про талант</li><li>Що таке система AI КВП і як вона працює на базі Notebook LM</li><li>Як інтегрувати AI КВП у ваш бізнес — покроковий план простих дій</li><li>Розбір 3 реальних кейсів: нерухомість, B2B виробництво, туризм</li></ul>
+        <div class="result-block"><div class="result-label">Результат:</div><div class="result-item">Ви точно знаєте, де саме ваш відділ продажів втрачає гроші — і маєте чек-лист конкретних дій.</div><div class="result-item">Ви перестаєте гадати, чому один менеджер закриває, а інший зливає.</div><div class="result-item emotional">Ви відчуваєте контроль над продажами — бо вперше бачите чітку систему, а не хаос.</div></div>
+        <div class="bonus-section"><div class="bonus-label">Що ви отримаєте після уроку:</div><div class="bonus-cards"><div class="bonus-card"><div class="mockup-pdf"><div class="mockup-pdf-header"><span>AI КВП — План</span></div><div class="mockup-pdf-body"><div class="mockup-pdf-row"><div class="mockup-check filled"></div><div class="mockup-line"></div></div><div class="mockup-pdf-row"><div class="mockup-check filled"></div><div class="mockup-line short"></div></div><div class="mockup-pdf-row"><div class="mockup-check"></div><div class="mockup-line accent"></div></div><div class="mockup-pdf-row"><div class="mockup-check"></div><div class="mockup-line"></div></div></div><div class="mockup-pdf-footer"><div class="mockup-pdf-badge">PDF</div></div></div><div class="bonus-card-text"><div class="bonus-card-title">Покроковий план дій</div><div class="bonus-card-desc">Як інтегрувати AI КВП у ваш бізнес</div></div></div><div class="bonus-card"><div class="mockup-nlm"><div class="mockup-nlm-header"><div class="mockup-nlm-dot r"></div><div class="mockup-nlm-dot y"></div><div class="mockup-nlm-dot g"></div><div class="mockup-nlm-tab">NotebookLM</div></div><div class="mockup-nlm-body"></div></div><div class="bonus-card-text"><div class="bonus-card-title">Інструмент Notebook LM</div><div class="bonus-card-desc">Інструмент, в якому ми працюємо протягом усього курсу</div></div></div></div></div>
+        <div class="homework-tag">Домашнє завдання</div>
+      </div></div>
+    </div>
+    <div class="prog-item">
+      <div class="prog-item-header" onclick="this.parentElement.classList.toggle('open')"><div class="prog-item-num">02</div><div class="prog-item-title">Як правильно завантажити свій бізнес в AI-інструмент і найняти свого першого AI КВП?</div><div class="prog-item-toggle">+</div></div>
+      <div class="prog-item-body"><div class="prog-item-inner">
+        <div class="important-banner"><div class="important-banner-icon">!</div><div class="important-banner-text"><strong>Важливо:</strong> Вам не потрібно витрачати додаткові гроші, час на найм та адаптацію.</div></div>
+        <ul class="bullets-list"><li>Що саме потрібно завантажити в AI-інструмент: дзвінки, скрипти, опис продукту, заперечення</li><li>Інструкція: як перевести аудіо-дзвінки в текст за 5 хвилин</li><li>Як правильно структурувати базу знань, щоб AI зрозумів ваш бізнес з першого промту</li><li><span class="practice-tag">Практика</span> Завантажуємо дані вашого бізнесу та запускаємо перший аналіз</li></ul>
+        <div class="result-block"><div class="result-label">Результат:</div><div class="result-item">У AI-інструменті завантажена жива база вашої компанії — і ви запускаєте перший аналіз.</div><div class="result-item">Ви бачите проблему в конкретних даних — реальних, не придуманих нейронкою.</div><div class="result-item emotional">Ви відчуваєте, що вперше маєте інструмент, який розуміє ваш бізнес.</div></div>
+        <div class="homework-tag">Домашнє завдання</div>
+      </div></div>
+    </div>
+    <div class="prog-item">
+      <div class="prog-item-header" onclick="this.parentElement.classList.toggle('open')"><div class="prog-item-num">03</div><div class="prog-item-title">Як створити скрипт продажів, який закриває — зібраний AI КВП з найкращих дзвінків?</div><div class="prog-item-toggle">+</div></div>
+      <div class="prog-item-body"><div class="prog-item-inner">
+        <ul class="bullets-list"><li>Як AI КВП за 2 хвилини знаходить найкращі діалоги із сотень дзвінків</li><li>Як за допомогою AI КВП виявити приховані потреби ваших клієнтів</li><li>Як проаналізувати заперечення і зрозуміти, чому клієнти не купують</li><li><span class="practice-tag">Практика</span> Створюємо скрипт, який продає — з найкращих розмов ваших менеджерів</li></ul>
+        <div class="result-block"><div class="result-label">Результат:</div><div class="result-item">У вас готовий скрипт продажів, побудований на реальних розмовах вашого відділу.</div><div class="result-item">Скрипт базується на тому, що реально працює у вашому бізнесі.</div><div class="result-item emotional">Ви відчуваєте впевненість, що менеджери продають за найсильнішим сценарієм.</div></div>
+        <div class="homework-tag">Домашнє завдання</div>
+      </div></div>
+    </div>
+    <div class="prog-item">
+      <div class="prog-item-header" onclick="this.parentElement.classList.toggle('open')"><div class="prog-item-num">04</div><div class="prog-item-title">Як створити систему контролю відділу продажів без прослуховування дзвінків?</div><div class="prog-item-toggle">+</div></div>
+      <div class="prog-item-body"><div class="prog-item-inner">
+        <div class="important-banner"><div class="important-banner-icon">!</div><div class="important-banner-text">AI КВП оцінює роботу усього відділу продажів або конкретних менеджерів.</div></div>
+        <ul class="bullets-list"><li>AI КВП автоматично оцінює кожен дзвінок по 10 критеріях якості</li><li>AI КВП створює чек-листи під ваші стандарти</li><li>AI КВП показує слабкі місця кожного менеджера</li><li>Як вбудувати регулярний контроль у роботу відділу продажів</li></ul>
+        <div class="result-block"><div class="result-label">Результат:</div><div class="result-item">У вас працює система оцінки менеджерів без вашої участі.</div><div class="result-item">Ви усуваєте слабкі місця за 3–5 днів — без найму нової людини.</div><div class="result-item emotional">Система AI КВП працює за вас — ви лише керуєте нею з телефону.</div></div>
+        <div class="bonus-section"><div class="bonus-label">Що ви отримаєте після уроку:</div><div class="bonus-cards"><div class="bonus-card"><div class="mockup-criteria"><div class="mockup-criteria-header"><span>10 критеріїв</span></div><div class="mockup-criteria-body"><div class="mockup-criteria-row"><div class="mockup-criteria-num">01</div><div class="mockup-criteria-bar"><div class="mockup-criteria-fill" style="width:90%"></div></div></div><div class="mockup-criteria-row"><div class="mockup-criteria-num">02</div><div class="mockup-criteria-bar"><div class="mockup-criteria-fill" style="width:75%"></div></div></div><div class="mockup-criteria-row"><div class="mockup-criteria-num">03</div><div class="mockup-criteria-bar"><div class="mockup-criteria-fill" style="width:60%"></div></div></div></div><div class="mockup-criteria-footer"><div class="mockup-pdf-badge">PDF</div></div></div><div class="bonus-card-text"><div class="bonus-card-title">10 критеріїв якості дзвінка</div><div class="bonus-card-desc">Файл з критеріями, за якими AI КВП оцінює кожну розмову</div></div></div></div></div>
+        <div class="homework-tag">Домашнє завдання</div>
+      </div></div>
+    </div>
+    <div class="prog-item">
+      <div class="prog-item-header" onclick="this.parentElement.classList.toggle('open')"><div class="prog-item-num">05</div><div class="prog-item-title">Жива демонстрація інтеграції повної системи AI КВП на реальному бізнесі <span class="prog-item-live">Прямий ефір</span></div><div class="prog-item-toggle">+</div></div>
+      <div class="prog-item-body"><div class="prog-item-inner">
+        <ul class="bullets-list"><li>Аналіз дзвінків за 20 хвилин: AI показує хто зливає угоди, на якому етапі і чому</li><li>Чат-бот, який фільтрує нецільових та передає гарячого клієнта менеджеру</li><li>Дашборд керівника: ранкова зведення по відділу продажів у Telegram</li><li>База знань: менеджер задає питання AI — отримує відповідь за 10 секунд</li></ul>
+        <div class="result-block"><div class="result-label">Результат:</div><div class="result-item">Ви бачите повністю вибудовану систему AI КВП — від аналізу дзвінків до автоматичного контролю.</div><div class="result-item">Ви розумієте, які інструменти потрібні під ваш бізнес і з чого почати.</div><div class="result-item emotional">Ви отримуєте розбір свого питання у прямому ефірі — Q&A.</div></div>
+      </div></div>
+    </div>
+  </div>
+  <div class="cta-wrapper" style="margin-top:28px"><button class="cta-button">Підвищити продажі х2-х4 <span class="discount-badge">-91%</span></button></div>
+</div>
+</div>
+<div class="s-transition"></div>
+
+<!-- CASES -->
+<div class="section-wrap bg-dark">
+<div class="inner">
+  <div class="cases-header"><h2>Реальні кейси бізнесів, <span>яким Володимир Куц допоміг інтегрувати AI КВП та покращити конверсії на кожному етапі х2–х4 рази</span></h2></div>
+  <div class="cases-carousel">
+    <div class="case-card">
+      <div class="case-card-header">
+        <div class="case-logo-wrap"><img src="logo3.jpg" alt="Sky Invest Home"></div>
+        <div class="case-header-info"><div class="case-name">Sky Invest Home</div><div class="case-niche">Агенція нерухомості</div></div>
+        <div class="case-result-num">×4</div>
+      </div>
+      <div class="case-body">
+        <div class="case-stage"><div class="case-stage-label before">До:</div><div class="case-stage-text">Не було єдиної системи продажів. Конверсія найкращого та найгіршого менеджера відрізнялась у 5 разів.</div></div>
+        <div class="case-stage"><div class="case-stage-label did">Що зробили:</div><div class="case-stage-text">Проаналізували дзвінки за рік. Виявили патерн найкращих. Створили скрипт на основі найкращих діалогів.</div></div>
+        <div class="case-result-line">Конверсія слабких менеджерів зросла в 4 рази. Розрив скоротився з 5x до 2x.</div>
+      </div>
+    </div>
+    <div class="case-card">
+      <div class="case-card-header">
+        <div class="case-logo-wrap dark"><img src="logo-plex.png" alt="Plexiwire"></div>
+        <div class="case-header-info"><div class="case-name">Plexiwire</div><div class="case-niche">B2B виробництво</div></div>
+        <div class="case-result-num">×2</div>
+      </div>
+      <div class="case-body">
+        <div class="case-stage"><div class="case-stage-label before">До:</div><div class="case-stage-text">Менеджери працювали без скриптів. Хаос у переписках.</div></div>
+        <div class="case-stage"><div class="case-stage-label did">Що зробили:</div><div class="case-stage-text">Проаналізували переписки та дзвінки через AI. Створили скрипти. Впровадили AI-фільтрацію.</div></div>
+        <div class="case-result-line">Загальна конверсія зросла вдвічі при тому ж бюджеті.</div>
+      </div>
+    </div>
+    <div class="case-card">
+      <div class="case-card-header">
+        <div class="case-logo-wrap"><img src="logo2.png.pagespeed.ce.nz86iyf2gq.png" alt="Рів'єра"></div>
+        <div class="case-header-info"><div class="case-name">Рів'єра</div><div class="case-niche">Туристична агенція</div></div>
+        <div class="case-result-num">×3</div>
+      </div>
+      <div class="case-body">
+        <div class="case-stage"><div class="case-stage-label before">До:</div><div class="case-stage-text">70% вхідних заявок — нецільові. Менеджери витрачали час на «порожніх» клієнтів.</div></div>
+        <div class="case-stage"><div class="case-stage-label did">Що зробили:</div><div class="case-stage-text">Проаналізували потік заявок. Створили автоматичну фільтрацію. Покращили скрипти.</div></div>
+        <div class="case-result-line">Конверсія зросла втричі — менеджер працює тільки з гарячими.</div>
+      </div>
+    </div>
+  </div>
+  <div class="cases-dots"><div class="cases-dot active"></div><div class="cases-dot"></div><div class="cases-dot"></div></div>
+</div>
+</div>
+<div class="s-transition"></div>
+
+<!-- GUARANTEE -->
+<div class="section-wrap bg-card">
+<div class="inner">
+  <div style="background:rgba(200,255,0,.04);border:1px solid rgba(200,255,0,.15);border-radius:16px;padding:32px 24px;text-align:center">
+    <div style="width:56px;height:56px;background:rgba(200,255,0,.1);border:2px solid rgba(200,255,0,.25);border-radius:50%;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:24px">🛡</div>
+    <div style="font-size:20px;font-weight:900;color:#c8ff00;line-height:1.3;margin-bottom:14px">14-денна гарантія повернення коштів</div>
+    <div style="font-size:13px;color:#aaa;line-height:1.7">Якщо протягом 14 днів ви переглянете всі уроки, виконаєте практичні завдання, відвідаєте прямий ефір і поставите свої запитання — але так і не зможете застосувати інструменти у своєму бізнесі або курс не виправдає ваших очікувань — <strong style="color:#fff;font-weight:700">я поверну вам повну суму без жодних питань.</strong></div>
+  </div>
+</div>
+</div>
+<div class="s-transition"></div>
+
+<!-- AUTHOR -->
+<div class="section-wrap bg-green">
+<div class="inner">
+  <div class="author-header"><h2>Хто і чому створив <span>цей курс?</span></h2></div>
+  <div class="author-card">
+    <div class="author-photo-wrap">
+      <img src="author.png" alt="Володимир Куц">
+    </div>
+    <div class="author-info-bar">
+      <div class="author-name">Володимир Куц</div>
+      <div class="author-role">Підприємець · AI-інтегратор · Автор методології AI КВП</div>
+      <ul class="author-points">
+        <li>Підприємець з 2008 року — 16+ років у бізнесі</li>
+        <li>Створив 12 бізнес-напрямків у різних нішах. 10 з 12 — прибуткові</li>
+        <li>Побудував та керував відділами продажів у кожному з цих бізнесів</li>
+        <li>З 2023 року — повний фокус на AI. Впровадив 72 AI-рішення в бізнеси різних ніш</li>
+        <li>Кофаундер AI-агентства на ринку США</li>
+      </ul>
+    </div>
+  </div>
+  <div class="author-quote"><div class="author-quote-text">У 2023 році, в перший місяць роботи з ChatGPT, я скоротив витрати своєї компанії на $3 000 — просто замінивши частину рутинної роботи AI-інструментами. Тоді я зрозумів: AI не просто допомагає швидше писати тексти — він змінює економіку бізнесу.</div><div class="author-quote-name">— Володимир Куц</div></div>
+</div>
+</div>
+<div class="s-transition"></div>
+
+<!-- WHAT YOU DO -->
+<div class="section-wrap bg-dark">
+<div class="inner">
+  <div class="wyg-header"><h2>Що ви зробите <span>прямо під час курсу</span> і що це дасть вашому бізнесу</h2></div>
+  <div class="step-path">
+    <div class="step-card"><div class="step-num">01</div><div class="step-text"><div class="step-title">Продіагностуєте свій відділ продажів / менеджера</div><div class="step-desc">За 10 хвилин побачите конкретні точки, де ваш бізнес втрачає гроші</div></div></div>
+    <div class="step-arrow"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 4L12 20M12 20L6 14M12 20L18 14" stroke="#c8ff00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="step-card"><div class="step-num">02</div><div class="step-text"><div class="step-title">Завантажите дані вашого бізнесу в AI-інструмент</div><div class="step-desc">За 5 хвилин отримаєте першого AI КВП</div></div></div>
+    <div class="step-arrow"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 4L12 20M12 20L6 14M12 20L18 14" stroke="#c8ff00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="step-card"><div class="step-num">03</div><div class="step-text"><div class="step-title">AI проаналізує сотні ваших дзвінків за 2 хвилини</div><div class="step-desc">Покаже, чого клієнт насправді хоче і чому каже «ні»</div></div></div>
+    <div class="step-arrow"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 4L12 20M12 20L6 14M12 20L18 14" stroke="#c8ff00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="step-card"><div class="step-num">04</div><div class="step-text"><div class="step-title">Зберете скрипт продажів з ваших найкращих дзвінків</div><div class="step-desc">Готовий до впровадження вже наступного дня</div></div></div>
+    <div class="step-arrow"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 4L12 20M12 20L6 14M12 20L18 14" stroke="#c8ff00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="step-card"><div class="step-num">05</div><div class="step-text"><div class="step-title">Побудуєте систему контролю менеджерів по 10 критеріях</div><div class="step-desc">Працює 24/7, без вас, без прослуховування</div></div></div>
+    <div class="step-arrow"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 4L12 20M12 20L6 14M12 20L18 14" stroke="#c8ff00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="step-card"><div class="step-num">06</div><div class="step-text"><div class="step-title">Побачите на живому прикладі повну систему AI КВП</div><div class="step-desc">Від аналізу дзвінків до автоматичного дашборду керівника</div></div></div>
+  </div>
+  <div class="cta-wrapper" style="margin-top:28px"><button class="cta-button">Інтегрувати AI КВП в свій бізнес <span class="discount-badge">-91%</span></button></div>
+</div>
+</div>
+<div class="s-transition"></div>
+
+<!-- WHAT YOU GET -->
+<div class="section-wrap bg-card">
+<div class="inner">
+  <div class="wyg-header"><h2>Повний список того, що ви <span>отримаєте</span> на курсі</h2></div>
+  <div class="wyg-grid">
+    <div class="wyg-card"><div class="wyg-num">🎓</div><div class="wyg-text"><div class="wyg-text-title">4 уроки в записі</div><div class="wyg-text-desc">4 практичних уроки з покроковим впровадженням AI КВП у ваш бізнес</div></div></div>
+    <div class="wyg-card"><div class="wyg-num">🔴</div><div class="wyg-text"><div class="wyg-text-title">Участь у живому ефірі</div><div class="wyg-text-desc">Реалізація повної системи AI КВП на реальному бізнесі + Q&A з автором</div></div></div>
+    <div class="wyg-card"><div class="wyg-num">✏️</div><div class="wyg-text"><div class="wyg-text-title">Домашні завдання після кожного уроку</div><div class="wyg-text-desc">Практичні завдання, які ви виконуєте на даних свого бізнесу — не теорія, а реальне впровадження</div></div></div>
+    <div class="wyg-card"><div class="wyg-num">📋</div><div class="wyg-text"><div class="wyg-text-title">Покроковий план дій (PDF)</div><div class="wyg-text-desc">Як інтегрувати AI КВП у ваш бізнес — файл з конкретними кроками, який працює і після курсу</div></div></div>
+    <div class="wyg-card"><div class="wyg-num">🛠</div><div class="wyg-text"><div class="wyg-text-title">Інструмент Notebook LM</div><div class="wyg-text-desc">Налаштований під ваш бізнес — ваші дзвінки, ваші клієнти, ваші угоди</div></div></div>
+    <div class="wyg-card"><div class="wyg-num">💬</div><div class="wyg-text"><div class="wyg-text-title">Список готових промтів</div><div class="wyg-text-desc">Для швидкого копіювання та інтеграції AI КВП прямо під час курсу — не потрібно придумувати самому</div></div></div>
+    <div class="wyg-card"><div class="wyg-num">🤖</div><div class="wyg-text"><div class="wyg-text-title">GPT-асистент «Консультант продажів»</div><div class="wyg-text-desc">Створений автором курсу на основі найкращих продавців світу — задаєте питання, отримуєте дієву відповідь 24/7</div></div></div>
+    <div class="wyg-card"><div class="wyg-num">✅</div><div class="wyg-text"><div class="wyg-text-title">10 критеріїв якості дзвінка (PDF)</div><div class="wyg-text-desc">Файл з критеріями, за якими AI КВП автоматично оцінює кожну розмову менеджера</div></div></div>
+    <div class="wyg-card"><div class="wyg-num">👨‍💻</div><div class="wyg-text"><div class="wyg-text-title">Підтримка від автора курсу в чаті</div><div class="wyg-text-desc">Задавайте питання — отримуйте відповіді від Володимира Куц особисто</div></div></div>
+    <div class="wyg-card"><div class="wyg-num">🛡</div><div class="wyg-text"><div class="wyg-text-title">14-денна гарантія повернення коштів</div><div class="wyg-text-desc">Якщо курс вам не підійде — повернемо 100% оплати без зайвих питань</div></div></div>
+  </div>
+  <div style="margin-top:32px;background:rgba(200,255,0,.04);border:1px solid rgba(200,255,0,.12);border-radius:14px;padding:24px;text-align:center">
+    <div style="font-size:13px;color:#999;margin-bottom:12px">Загальна вартість усього переліченого вище:</div>
+    <div style="margin-bottom:16px"><span class="price-old" style="font-size:20px">4 200 грн</span><span class="price-new" style="font-size:36px">390 <em>грн</em></span></div>
+    <div class="cta-wrapper"><button class="cta-button">Отримати доступ <span class="discount-badge">-91%</span></button></div>
+  </div>
+</div>
+</div>
+<div class="s-transition"></div>
+
+<!-- FAQ -->
+<div class="section-wrap bg-green">
+<div class="inner">
+  <div class="faq-header"><h2 style="color:#fff">Часті <span>запитання</span></h2></div>
+  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')"><span style="color:#eee">Чи підійде курс, якщо у мене лише 1–2 менеджери?</span><span class="icon">+</span></div><div class="faq-a"><div class="faq-a-inner">Так. Система AI КВП працює навіть з одним менеджером.</div></div></div>
+  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')"><span style="color:#eee">Чи потрібні технічні знання або програміст?</span><span class="icon">+</span></div><div class="faq-a"><div class="faq-a-inner">Ні. Ми працюємо з безкоштовним інструментом Notebook LM. Все, що потрібно — це браузер та ваші дані.</div></div></div>
+  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')"><span style="color:#eee">Скільки часу потрібно на проходження курсу?</span><span class="icon">+</span></div><div class="faq-a"><div class="faq-a-inner">Курс розрахований на 5 днів. На один урок + практику — 30–60 хвилин на день.</div></div></div>
+  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')"><span style="color:#eee">А якщо у мене немає записаних дзвінків?</span><span class="icon">+</span></div><div class="faq-a"><div class="faq-a-inner">В уроці №2 ми детально розбираємо, що саме завантажити. Це можуть бути переписки, опис продукту, заперечення, описи угод.</div></div></div>
+  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')"><span style="color:#eee">Чи потрібно знати англійську?</span><span class="icon">+</span></div><div class="faq-a"><div class="faq-a-inner">Ні. Notebook LM працює з українською та російською. Весь курс — українською.</div></div></div>
+  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')"><span style="color:#eee">Чим AI КВП відрізняється від ChatGPT?</span><span class="icon">+</span></div><div class="faq-a"><div class="faq-a-inner">ChatGPT працює на загальних даних. AI КВП працює тільки з вашими даними — вашими дзвінками, клієнтами, угодами.</div></div></div>
+  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')"><span style="color:#eee">Чи є додаткові витрати?</span><span class="icon">+</span></div><div class="faq-a"><div class="faq-a-inner">Ні. Notebook LM — безкоштовний інструмент від Google. Вартість курсу — єдина інвестиція.</div></div></div>
+  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')"><span style="color:#eee">Скільки часу потрібно на інтеграцію AI КВП?</span><span class="icon">+</span></div><div class="faq-a"><div class="faq-a-inner">Близько 2 годин вашого часу. Ви інтегруєте AI КВП поступово — крок за кроком, урок за уроком.</div></div></div>
+  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')"><span style="color:#eee">Що буде на 5-му уроці (вебінарі)?</span><span class="icon">+</span></div><div class="faq-a"><div class="faq-a-inner">Жива демонстрація повної системи AI КВП на реальному бізнесі + Q&A в прямому ефірі.</div></div></div>
+  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')"><span style="color:#eee">Як швидко я побачу результат?</span><span class="icon">+</span></div><div class="faq-a"><div class="faq-a-inner">Перші результати — після Уроку 1. Готовий скрипт — після Уроку 3. Повна система — після Уроку 4. Все за 5 днів.</div></div></div>
+  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')"><span style="color:#eee">Що якщо курс мені не підійде?</span><span class="icon">+</span></div><div class="faq-a"><div class="faq-a-inner">Якщо протягом перших 14 днів ви зрозумієте, що курс не підходить — ми повернемо кошти без зайвих питань.</div></div></div>
+</div>
+</div>
+<div class="s-transition"></div>
+
+<!-- FINAL CTA -->
+<div class="section-wrap bg-deep">
+<div class="inner final-cta">
+  <h2><span>390 грн</span> зараз — або <span>35 000–80 000 грн/міс</span> на живого КВП потім</h2>
+  <p>Один втрачений клієнт вже коштує більше, ніж увесь курс. 390 грн — і через 5 днів у вас система, яка контролює кожен дзвінок.</p>
+  <div class="price-block"><span class="price-old">4 200 грн</span><span class="price-new">390 <em>грн</em></span></div>
+  <div class="cta-wrapper"><button class="cta-button">Отримати доступ <span class="discount-badge">-91%</span></button></div>
+  <div class="cta-note">Одразу після оплати ви отримаєте доступ у Telegram-бот, де на вас чекає курс та усі матеріали</div>
+</div>
+</div>
+
+<div class="sticky-cta" id="stickyCta">
+  <div style="display:flex;justify-content:space-between;align-items:center;padding:0 4px;margin-bottom:8px;pointer-events:all">
+    <div><span style="font-size:14px;color:#666;text-decoration:line-through;font-weight:600">4 200 грн</span> <span style="font-size:22px;font-weight:900;color:#c8ff00">390 грн</span></div>
+    <div style="font-size:11px;color:#999;font-weight:600">Гарантія 14 днів</div>
+  </div>
+  <button class="sticky-cta-btn">КУПИТИ КУРС ЗАРАЗ -91%</button>
+</div>
+
+</div>
+
+<script>
+(function(){var t=new Date();t.setDate(t.getDate()+1);var m=['січня','лютого','березня','квітня','травня','червня','липня','серпня','вересня','жовтня','листопада','грудня'];document.getElementById('startDate').textContent=t.getDate()+' '+m[t.getMonth()];var dl=document.getElementById('priceDeadline');if(dl){var now=new Date();dl.textContent=now.getDate()+' '+m[now.getMonth()];}})();
+(function(){var totalSec=10*60;var minEl=document.getElementById('cdMin');var secEl=document.getElementById('cdSec');function tick(){if(totalSec<=0){totalSec=10*60;}totalSec--;var m=Math.floor(totalSec/60);var s=totalSec%60;minEl.textContent=m<10?'0'+m:m;secEl.textContent=s<10?'0'+s:s;}setInterval(tick,1000);})();
+(function(){var sticky=document.getElementById('stickyCta');window.addEventListener('scroll',function(){if(window.scrollY>800){sticky.classList.add('visible');}});})();
+(function(){var carousel=document.querySelector('.cases-carousel');var dots=document.querySelectorAll('.cases-dot');if(carousel&&dots.length){carousel.addEventListener('scroll',function(){var scrollLeft=carousel.scrollLeft;var cardWidth=carousel.querySelector('.case-card').offsetWidth+16;var idx=Math.round(scrollLeft/cardWidth);dots.forEach(function(d,i){d.classList.toggle('active',i===idx);});});}})();
+(function(){var sections=document.querySelectorAll('.section-wrap');var symbols=['$','₴'];var anims=['fcA','fcB','fcC'];var sizes=[18,20,22,24,26,28,30,32];var opacities=[0.10,0.12,0.14,0.16,0.18];var durations=[16,18,20,22,24,26];var leftPositions=[1,2,3,4,5,6,7,8];var rightPositions=[85,87,89,91,93,95,97];var topPositions=[5,12,20,28,36,44,52,60,68,76,84,92];sections.forEach(function(sec,idx){var count=4+Math.floor(Math.random()*3);for(var i=0;i<count;i++){var el=document.createElement('div');el.className='fc';el.textContent=symbols[(idx+i)%2];var sz=sizes[Math.floor(Math.random()*sizes.length)];var op=opacities[Math.floor(Math.random()*opacities.length)];var dur=durations[Math.floor(Math.random()*durations.length)];var anim=anims[Math.floor(Math.random()*anims.length)];var delay=Math.floor(Math.random()*8);var topP=topPositions[Math.floor(Math.random()*topPositions.length)];var isLeft=i%2===0;var leftP=isLeft?leftPositions[Math.floor(Math.random()*leftPositions.length)]:rightPositions[Math.floor(Math.random()*rightPositions.length)];el.style.cssText='font-size:'+sz+'px;color:rgba(180,230,0,'+op+');top:'+topP+'%;left:'+leftP+'%;animation:'+anim+' '+dur+'s ease-in-out '+delay+'s infinite';sec.appendChild(el);}});})();
+</script>
+</body>
+</html>
