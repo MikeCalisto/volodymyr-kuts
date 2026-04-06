@@ -60,6 +60,19 @@ body{background:#0a0a0a;color:#e8e8e8;font-family:'Montserrat',sans-serif;line-h
 .countdown-num{font-size:28px;font-weight:900;color:#c8ff00;display:block;line-height:1}
 .countdown-unit{font-size:9px;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-top:4px;display:block}
 .countdown-sep{font-size:24px;font-weight:700;color:rgba(200,255,0,.3)}
+.site-footer{background:#070707;border-top:1px solid rgba(255,255,255,.06);padding:40px 0 24px}
+.footer-inner{max-width:480px;margin:0 auto;padding:0 20px}
+.footer-top{margin-bottom:28px}
+.footer-logo{font-size:22px;font-weight:900;color:#fff;letter-spacing:-0.5px;margin-bottom:10px}
+.footer-logo span{color:#c8ff00}
+.footer-desc{font-size:13px;color:#666;line-height:1.5;margin-bottom:16px}
+.footer-links{display:flex;gap:20px;flex-wrap:wrap}
+.footer-links a{font-size:12px;color:#888;text-decoration:underline;text-underline-offset:3px}
+.footer-links a:hover{color:#c8ff00}
+.footer-legal{display:flex;flex-direction:column;gap:16px;padding:20px 0;border-top:1px solid rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.05);margin-bottom:16px}
+.footer-fop-name{font-size:11px;font-weight:700;color:#aaa;letter-spacing:.3px;margin-bottom:4px}
+.footer-fop-details{font-size:11px;color:#555;line-height:1.6}
+.footer-copy{font-size:11px;color:#444;text-align:center}
 .sticky-cta{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:100;padding:16px 20px 12px;background:linear-gradient(180deg,transparent 0%,#0a0a0a 25%);pointer-events:none;display:none}
 .sticky-cta.visible{display:block}
 .sticky-cta-btn{display:flex;align-items:center;justify-content:center;gap:8px;background:#c8ff00;color:#0a0a0a;font-family:'Montserrat',sans-serif;font-size:14px;font-weight:800;padding:16px 24px;border-radius:12px;border:none;cursor:pointer;text-transform:uppercase;letter-spacing:.5px;width:100%;box-shadow:0 -4px 24px rgba(200,255,0,.25);pointer-events:all;animation:ctaPulse 2.5s ease-in-out infinite}
@@ -628,6 +641,34 @@ body{background:#0a0a0a;color:#e8e8e8;font-family:'Montserrat',sans-serif;line-h
 </div>
 
 </div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-logo">АІ <span>КВП</span></div>
+      <p class="footer-desc">Курс з практичного впровадження AI керівника відділу продажів у ваш бізнес за 5 уроків.</p>
+      <div class="footer-links">
+        <a href="/oferta.html">Договір оферти</a>
+        <a href="/policy.html">Політика конфіденційності</a>
+      </div>
+    </div>
+    <div class="footer-legal">
+      <div class="footer-fop">
+        <div class="footer-fop-name">ЗЕМЛЯНИЙ МИХАЙЛО СЕРГІЙОВИЧ ФОП</div>
+        <div class="footer-fop-details">ЄДРПОУ: 3758302175</div>
+        <div class="footer-fop-details">+380985966120</div>
+        <div class="footer-fop-details">m.zemlyanie@gmail.com</div>
+      </div>
+      <div class="footer-fop">
+        <div class="footer-fop-name">БРЖЕСТОВСЬКА ГАННА ЮРІЇВНА ФОП</div>
+        <div class="footer-fop-details">ЄДРПОУ: 2877703349</div>
+        <div class="footer-fop-details">894159@gmail.com</div>
+      </div>
+    </div>
+    <div class="footer-copy">© 2025 АІ КВП — Курс Володимира Куц</div>
+  </div>
+</footer>
 
 <script>
 (function(){var t=new Date();t.setDate(t.getDate()+1);var m=['січня','лютого','березня','квітня','травня','червня','липня','серпня','вересня','жовтня','листопада','грудня'];document.getElementById('startDate').textContent=t.getDate()+' '+m[t.getMonth()];var dl=document.getElementById('priceDeadline');if(dl){var now=new Date();dl.textContent=now.getDate()+' '+m[now.getMonth()];}})();
